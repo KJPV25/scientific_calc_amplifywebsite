@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>K.J.P.Vaibhav's Calculator Apps</title>
+    <h1>Welcome to my Calculator Apps</h1> 
+    <div class="multicolor-text"><b>Hosted on AWS Amplify</b></div>
+    <a href="https://linktr.ee/kjpvaibhav"><h5>👉About Me👈</h5></a>
+
+    <style>
+      h1{
+      text-align: center;
+      color: #FF9933;
+      }
+
+      .multicolor-text{
+          text-align: center;
+          font-size: larger;
+          background-clip: text;
+          background: linear-gradient(to left,#FFFFFF,#06038D,#FFFFFF);
+          background-clip: text;
+          -webkit-background-clip: text;
+          color: transparent; 
+        }
+
+      h3{
+          text-align: center;
+          color: #FFFFFF;
+        }
+
+      h5{
+          text-align: center;
+          color: #138808;
+        }
+
+      body{
+          font-family: Arial, sans-serif;
+          background-color: #1e1e1e;
+          color: #ffffff;
+        }
+
+      #calculator-container{
+          width: 400px;
+          margin: 50px auto;
+          padding: 20px;
+          border: 1px solid #444;
+          border-radius: 5px;
+          box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+          background-color: #333;
+        }
+
+      input{
+          width: calc(100% - 20px);
+          margin-bottom: 10px;
+          padding: 10px;
+          font-size: 16px;
+          background-color: #444;
+          color: #ffffff;
+          border: none;
+          border-radius: 5px;
+        }
+
+      table{
+          width: 100%;
+        }
+
+      tr{
+          text-align: center;
+        }
+
+      button{
+          width: 100%;
+          padding: 10px;
+          margin: 5px;
+          font-size: 16px;
+          cursor: pointer;
+          background-color: #555;
+          color: #ffffff;
+          border: none;
+          border-radius: 5px;
+        }
+
+      .numeral-system-selector{
+          margin-bottom: 10px;
+        }
+
+      #age-calculator, #interest-calculator, #sip-calculator, #date-difference-calculator, #base-calculator, #percentage-calculator {
+          display: none;
+        }
+    </style>
+  </head>
+
+  <body>
+    <div id="calculator-container">
+        <label for="calculator-type">Select Calculator Type:</label>
+        <select id="calculator-type" onchange="changeCalculator()">
+          <option value="scientific">Scientific Calculator</option>
+          <option value="age">Age Calculator</option>
+          <option value="interest">Interest Calculator</option>
+          <option value="sip">SIP Calculator</option>
+          <option value="date-difference">Date Difference Calculator</option>
+          <option value="base">Number Base Converter</option>
+          <option value="percentage">Percentage Calculator</option>
+        </select>
+        <br><br>
+
+        <div id="scientific-calculator">
+          <input type="text" id="display" disabled>
+          <table>
+            <tr>
+              <td colspan="2"><button onclick="clearDisplay()">C</button></td>
+              <td><button onclick="backspace()">←</button></td>
+              <td><button onclick="appendToDisplay('/')">/</button></td>
+              <td><button onclick="appendToDisplay('%')">%</button></td>
+              <td><button onclick="appendToDisplay('tan(')">tan</button></td>
+            </tr>
+            <tr>
+              <td><button onclick="appendToDisplay('7')">7</button></td>
+              <td><button onclick="appendToDisplay('8')">8</button></td>
+              <td><button onclick="appendToDisplay('9')">9</button></td>
+              <td><button onclick="appendToDisplay('*')">*</button></td>
+              <td><button onclick="appendToDisplay('**')">^</button></td>
+              <td><button onclick="appendToDisplay('cos(')">cos</button></td>
+            </tr>
+            <tr>
+              <td><button onclick="appendToDisplay('4')">4</button></td>
+              <td><button onclick="appendToDisplay('5')">5</button></td>
+              <td><button onclick="appendToDisplay('6')">6</button></td>
+              <td><button onclick="appendToDisplay('-')">-</button></td>
+              <td><button onclick="appendToDisplay('(')">(</button></td>
+              <td><button onclick="appendToDisplay('sin(')">sin</button></td>
+            </tr>
+            <tr>
+              <td><button onclick="appendToDisplay('1')">1</button></td>
+              <td><button onclick="appendToDisplay('2')">2</button></td>
+              <td><button onclick="appendToDisplay('3')">3</button></td>
+              <td><button onclick="appendToDisplay('+')">+</button></td>
+              <td><button onclick="appendToDisplay(')')">)</button></td>
+              <td><button onclick="appendToDisplay('ln(')">ln</button></td>
+            </tr>
+            <tr>
+              <td colspan="2"><button onclick="appendToDisplay('0')">0</button></td>
+              <td><button onclick="appendToDisplay('.')">.</button></td>
+              <td colspan="2"><button onclick="calculateResult()">=</button></td>
+              <td><button onclick="appendToDisplay('log(')">log</button></td>
+            </tr>
+          </table>
+        </div>
+
+        <div id="age-calculator" style="display:none;">
+          <label for="dob">Date of Birth:</label>
+          <input type="date" id="dob">
+          <label for="time">Time of Birth (24 hours format/Ignore):</label>
+          <input type="time" id="time" value="00:00">
+          <button onclick="calculateAge()">Calculate Age</button>
+          <div id="age-result"></div>
+        </div>
+
+        <div id="interest-calculator" style="display:none;">
+          <label for="interest-type">Select Interest Type:</label>
+          <select id="interest-type">
+            <option value="Simple">Simple Interest</option>
+            <option value="Compound">Compound Interest</option>
+          </select>
+          <br><br>
+          <label for="numeral-system-interest" class="numeral-system-selector">Select Numeral System:</label>
+          <select id="numeral-system-interest" onchange="updateInterestResult()">
+            <option value="en" selected>English (1,000,000)</option>
+            <option value="en-IN">Indian (10,00,000)</option>
+          </select>
+          <br><br>
+          <label for="principal">Principal Amount:</label>
+          <input type="number" id="principal" placeholder="Enter principal amount">
+          <label for="rate">Interest Rate:</label>
+          <input type="number" id="rate" placeholder="Enter interest rate">
+          <label for="time-interest">Time (in years):</label>
+          <input type="number" id="time-interest" placeholder="Enter time in years">
+          <button onclick="calculateInterest()">Calculate Interest</button>
+          <div id="interest-result"></div>
+        </div>
+
+        <div id="sip-calculator" style="display:none;">
+          <label for="monthly-investment">Monthly Investment:</label>
+          <input type="number" id="monthly-investment" placeholder="Enter monthly investment amount">
+          <label for="annual-return">Expected Annual Return Rate:</label>
+          <input type="number" id="annual-return" placeholder="Enter expected annual return">
+          <label for="sip-period">Investment Period (in years):</label>
+          <input type="number" id="sip-period" placeholder="Enter investment period in years">
+          <label for="numeral-system-sip" class="numeral-system-selector">Select Numeral System:</label>
+            <select id="numeral-system-sip" onchange="updateSIPResult()">
+              <option value="en" selected>English (1,000,000)</option>
+              <option value="en-IN">Indian (10,00,000)</option>
+            </select>
+            <br><br>
+          <button onclick="calculateSIP()">Calculate SIP</button>
+          <div id="sip-result"></div>
+        </div>
+
+        <div id="date-difference-calculator" style="display:none;">
+          <label for="numeral-system-date-difference" class="numeral-system-selector">Select Numeral System:</label>
+          <select id="numeral-system-date-difference" onchange="updateDateDifferenceResult()">
+            <option value="en" selected>English (1,000,000)</option>
+            <option value="en-IN">Indian (10,00,000)</option>
+          </select>
+          <br><br>
+          <label for="start-date">Start Date:</label>
+          <input type="date" id="start-date">
+          <label for="end-date">End Date:</label>
+          <input type="date" id="end-date">
+          <button onclick="calculateDateDifference()">Calculate Difference</button>
+          <div id="date-difference-result"></div>
+        </div>
+
+        <div id="base-calculator" style="display:none;">
+          <label for="number">Enter Number:</label>
+          <input type="text" id="number" placeholder="Enter a number">
+
+          <label for="from-radix">From Radix:</label>
+          <select id="from-radix">
+            <option value="2">Binary</option>
+            <option value="8">Octal</option>
+            <option value="10" selected>Decimal</option>
+            <option value="16">Hexadecimal</option>
+          </select>
+
+          <button onclick="convertNumber()">Convert</button>
+          <div id="result"></div>
+        </div>
+
+        <div id="percentage-calculator" style="display:none;">
+          <label for="original-value">Original Value:</label>
+          <input type="number" id="original-value" placeholder="Enter original value">
+          <label for="percentage">Percentage:</label>
+          <input type="number" id="percentage" placeholder="Enter percentage">
+          <button onclick="calculatePercentage()">Calculate Percentage</button>
+          <div id="percentage-result"></div>
+        </div>
+      </div>
+
+    <script>
+      function changeCalculator() {
+        const calculatorType = document.getElementById('calculator-type').value;
+        const calculators = ['scientific', 'age', 'interest', 'sip', 'date-difference', 'base', 'percentage'];
+        
+        calculators.forEach((calcType) => {
+          const calculatorDiv = document.getElementById(`${calcType}-calculator`);
+          calculatorDiv.style.display = calculatorType === calcType ? 'block' : 'none';
+        });
+      }
+      
+      function appendToDisplay(value) {
+        document.getElementById('display').value += value;
+      }
+      
+      function clearDisplay() {
+        document.getElementById('display').value = '';
+      }
+      
+      function backspace() {
+        let displayValue = document.getElementById('display').value;
+        document.getElementById('display').value = displayValue.slice(0, -1);
+      }
+      
+      function calculateResult() {
+        try {
+          let expression = document.getElementById('display').value;
+          expression = expression.replace(/sin\(/g, 'Math.sin(');
+          expression = expression.replace(/cos\(/g, 'Math.cos(');
+          expression = expression.replace(/tan\(/g, 'Math.tan(');
+          expression = expression.replace(/log\(/g, 'Math.log10(');
+          expression = expression.replace(/ln\(/g, 'Math.log(');
+          expression = expression.replace(/,/g, '.');
+      
+          document.getElementById('display').value = eval(expression);
+        } catch (error) {
+          document.getElementById('display').value = 'Error';
+        }
+      }
+      
+      function calculateAge() {
+        const dobInput = document.getElementById('dob');
+        const timeInput = document.getElementById('time');
+        const ageResultDiv = document.getElementById('age-result');
+      
+        const dob = new Date(dobInput.value);
+        const time = timeInput.value.split(':');
+        dob.setHours(time[0], time[1]); 
+      
+        const now = new Date();
+        const ageInMilliseconds = now - dob;
+        const ageInSeconds = Math.floor(ageInMilliseconds / 1000);
+      
+        const years = Math.floor(ageInSeconds / (365 * 24 * 60 * 60));
+        const months = Math.floor((ageInSeconds % (365 * 24 * 60 * 60)) / (30 * 24 * 60 * 60));
+        const days = Math.floor((ageInSeconds % (30 * 24 * 60 * 60)) / (24 * 60 * 60));
+        const hours = Math.floor((ageInSeconds % (24 * 60 * 60)) / (60 * 60));
+        const minutes = Math.floor((ageInSeconds % (60 * 60)) / 60);
+        const seconds = ageInSeconds % 60;
+      
+        const dayOfBirth = dob.toLocaleDateString('en-US', { weekday: 'long' });
+      
+        ageResultDiv.innerHTML = `
+        <h4>Age:</h4>
+        <p>Years: ${years}</p>
+        <p>Months: ${months}</p>
+        <p>Days: ${days}</p>
+        <p>Hours: ${hours}</p>
+        <p>Minutes: ${minutes}</p>
+        <p>Seconds: ${seconds}</p>
+        <h4>Day of Birth:</h4>
+        <p>${dayOfBirth}</p>
+      `;
+      }
+      
+      function calculateInterest() {
+        const interestType = document.getElementById('interest-type').value;
+        const principal = parseFloat(document.getElementById('principal').value);
+        const rate = parseFloat(document.getElementById('rate').value);
+        const time = parseFloat(document.getElementById('time-interest').value);
+        const numeralSystem = document.getElementById('numeral-system-interest').value;
+      
+        if (isNaN(principal) || isNaN(rate) || isNaN(time)) {
+          const interestResultDiv = document.getElementById('interest-result');
+          interestResultDiv.innerHTML = 'Please enter valid numbers for principal, rate, and time.';
+          return;
+        }
+      
+        let interest = 0;
+        let total = 0;
+      
+        if (interestType === 'Simple') {
+          interest = (principal * rate * time) / 100;
+        } else if (interestType === 'Compound') {
+          const compoundInterest = principal * Math.pow((1 + rate / 100), time);
+          interest = compoundInterest - principal;
+        }
+        total = principal + interest;
+      
+        const formattedPrincipal = principal.toLocaleString(numeralSystem);
+        const formattedInterest = interest.toLocaleString(numeralSystem);
+        const formattedTotal = total.toLocaleString(numeralSystem);
+      
+        const interestResultDiv = document.getElementById('interest-result');
+        interestResultDiv.innerHTML = `
+          <h4>${interestType} Interest: </h4>
+          <p>${formattedInterest}</p>
+          <h4>Total Value: </h4>
+          <p>${formattedTotal}</p>
+        `;
+      }
+      
+      function updateInterestResult() {
+        calculateInterest();
+      }
+      
+      function calculateSIP() {
+        const monthlyInvestment = parseFloat(document.getElementById('monthly-investment').value);
+        const annualReturn = parseFloat(document.getElementById('annual-return').value);
+        const sipPeriod = parseFloat(document.getElementById('sip-period').value);
+        const numeralSystem = document.getElementById('numeral-system-sip').value;
+      
+        if (isNaN(monthlyInvestment) || isNaN(annualReturn) || isNaN(sipPeriod)) {
+          const sipResultDiv = document.getElementById('sip-result');
+          sipResultDiv.innerHTML = 'Please enter valid numbers for monthly investment, annual return, and SIP period.';
+          return;
+        }
+      
+        const monthlyRate = annualReturn / 12 / 100;
+        const totalMonths = sipPeriod * 12;
+        const investedAmount = monthlyInvestment * totalMonths;
+      
+        let futureValue = 0;
+      
+        for (let i = 0; i < totalMonths; i++) {
+          futureValue = (futureValue + monthlyInvestment) * (1 + monthlyRate);
+        }
+      
+        const estReturns = futureValue - investedAmount;
+      
+        const formattedInvestedAmount = investedAmount.toLocaleString(numeralSystem);
+        const formattedEstReturns = estReturns.toLocaleString(numeralSystem);
+        const formattedFutureValue = futureValue.toLocaleString(numeralSystem);
+      
+        const sipResultDiv = document.getElementById('sip-result');
+        sipResultDiv.innerHTML = `
+          <h4>Invested Amount :</h4>
+          <p>${formattedInvestedAmount}</p>
+          <h4>Estimated Returns :</h4>
+          <p>${formattedEstReturns}</p>
+          <h4>Future Value of SIP:</h4>
+          <p>${formattedFutureValue}</p>
+        `;
+      }
+      
+      function updateSIPResult() {
+        calculateSIP();
+      }
+      
+      function calculateDateDifference() {
+        const startDate = new Date(document.getElementById('start-date').value);
+        const endDate = new Date(document.getElementById('end-date').value);
+        const numeralSystem = document.getElementById('numeral-system-date-difference').value;
+      
+        if (isNaN(startDate) || isNaN(endDate)) {
+          const dateDifferenceResultDiv = document.getElementById('date-difference-result');
+          dateDifferenceResultDiv.innerHTML = 'Please enter valid dates.';
+          return;
+        }
+      
+        const timeDifference = Math.abs(endDate.getTime() - startDate.getTime());
+        const yearsDifference = Math.abs(endDate.getFullYear() - startDate.getFullYear());
+        const monthsDifference = Math.abs((endDate.getMonth() - startDate.getMonth()) + 12 * (endDate.getFullYear() - startDate.getFullYear()));
+        const daysDifference = Math.ceil(timeDifference / (1000 * 3600 * 24));
+        const hoursDifference = Math.ceil(timeDifference / (1000 * 3600));
+        const minutesDifference = Math.ceil(timeDifference / (1000 * 60));
+        const secondsDifference = Math.ceil(timeDifference / 1000);
+      
+        const formattedYearsDifference = yearsDifference.toLocaleString(numeralSystem);
+        const formattedMonthsDifference = monthsDifference.toLocaleString(numeralSystem);
+        const formattedDaysDifference = daysDifference.toLocaleString(numeralSystem);
+        const formattedHoursDifference = hoursDifference.toLocaleString(numeralSystem);
+        const formattedMinutesDifference = minutesDifference.toLocaleString(numeralSystem);
+        const formattedSecondsDifference = secondsDifference.toLocaleString(numeralSystem);
+      
+        const dateDifferenceResultDiv = document.getElementById('date-difference-result');
+        dateDifferenceResultDiv.innerHTML = `
+          <h2>Not including the end date</h2>
+          <h4>Years Difference (Approx.) :</h4><p>${formattedYearsDifference} years</p>
+          <h4>Months Difference (Approx.) :</h4><p>${formattedMonthsDifference} months</p>
+          <h4>Days Difference :</h4><p>${formattedDaysDifference} days</p>
+          <h4>Hours Difference :</h4><p>${formattedHoursDifference} hours</p>
+          <h4>Minutes Difference :</h4><p>${formattedMinutesDifference} minutes</p>
+          <h4>Seconds Difference :</h4><p>${formattedSecondsDifference} seconds</p>
+        `;
+      }
+      
+      function updateDateDifferenceResult() {
+        calculateDateDifference();
+      }
+      
+      function convertNumber() {
+        const numberInput = document.getElementById('number').value;
+        const fromRadix = parseInt(document.getElementById('from-radix').value, 10);
+      
+        if (isNaN(fromRadix)) {
+          document.getElementById('result').innerHTML = 'Please select valid radix values.';
+          return;
+        }
+      
+        try {
+          const decimalNumber = parseInt(numberInput, fromRadix);
+          const binaryNumber = decimalNumber.toString(2).toUpperCase();
+          const octalNumber = decimalNumber.toString(8).toUpperCase();
+          const decimalNumberStr = decimalNumber.toString(10);
+          const hexadecimalNumber = decimalNumber.toString(16).toUpperCase();
+      
+          const resultHtml = `
+            <h4>Binary:</h4>
+            <p>${binaryNumber}</p>
+            <h4>Octal:</h4>
+            <p>${octalNumber}</p>
+            <h4>Decimal:</h4>
+            <p>${decimalNumberStr}</p>
+            <h4>Hexadecimal:</h4>
+            <p>${hexadecimalNumber}</p>
+          `;
+      
+          document.getElementById('result').innerHTML = resultHtml;
+        } catch (error) {
+          document.getElementById('result').innerHTML = 'Error converting the number.';
+        }
+      }  
+
+      function calculatePercentage() {
+        const originalValue = parseFloat(document.getElementById('original-value').value);
+        const percentage = parseFloat(document.getElementById('percentage').value);
+
+        if (isNaN(originalValue) || isNaN(percentage)) {
+          const percentageResultDiv = document.getElementById('percentage-result');
+          percentageResultDiv.innerHTML = 'Please enter valid numbers for original value and percentage.';
+          return;
+        }
+
+        const calculatedPercentage = (percentage / 100) * originalValue;
+        const totalValue = originalValue + calculatedPercentage;
+
+        const formattedOriginalValue = originalValue.toLocaleString();
+        const formattedCalculatedPercentage = calculatedPercentage.toLocaleString();
+        const formattedTotalValue = totalValue.toLocaleString();
+
+        const percentageResultDiv = document.getElementById('percentage-result');
+        percentageResultDiv.innerHTML = `
+          <h4>Calculated Percentage:</h4>
+          <p>${formattedCalculatedPercentage}</p>
+          <h4>Total Value:</h4>
+          <p>${formattedTotalValue}</p>
+        `;
+      }
+
+      function updatePercentageResult() {
+        calculatePercentage();
+      }
+
+
+    </script>
+    <a href="https://upload.wikimedia.org/wikipedia/en/thumb/4/41/Flag_of_India.svg/1200px-Flag_of_India.svg.png?20230723002237"><h3>👉Made in 🇮🇳👈</h3></a>
+  </body>
+</html>

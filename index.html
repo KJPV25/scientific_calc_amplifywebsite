@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="linktreeQR_200x200.png" type="image/x-icon">
+    <title>K.J.P.Vaibhav's Calculator Apps</title>
+    <link rel="stylesheet" type="text/css" href ="styles.css">
+    <script src="script.js"> </script>
+    <h1>Welcome to my Calculator Apps</h1> 
+    <div class="multicolor-text"><b>Hosted on AWS Amplify</b></div>
+    <a href="https://linktr.ee/kjpvaibhav"><h5>👉About Me👈</h5></a>
+  </head>
+
+  <body>
+    <div id="calculator-container">
+      <label for="calculator-type">Select Calculator Type:</label>
+      <select id="calculator-type" onchange="changeCalculator()">
+        <option value="scientific">Scientific Calculator</option>
+        <option value="age">Age Calculator</option>
+        <option value="bmi">Body Mass Index Calculator</option>
+        <option value="date-difference">Date Difference Calculator</option>
+        <option value="fuel-consumption">Fuel Consumption Calculator</option>
+        <option value="geometry">Geometry Calculator</option>
+        <option value="interest">Interest Calculator</option>
+        <option value="mortgage">Mortgage Calculator</option>
+        <option value="base">Number Base Converter</option>
+        <option value="sip">SIP Calculator</option>
+        <option value="units">Unit Converter</option>
+      </select>
+      <br><br>
+    
+      <div id="scientific-calculator">
+        <h3>Scientific Calculator</h3>
+        <input type="text" id="display" disabled>
+        <table>
+          <tr>
+            <td colspan="2"><button onclick="clearDisplay()">C</button></td>
+            <td><button onclick="backspace()">←</button></td>
+            <td><button onclick="appendToDisplay('/')">/</button></td>
+            <td><button onclick="appendToDisplay('%')">%</button></td>
+            <td><button onclick="appendToDisplay('tan(')">tan</button></td>
+          </tr>
+          <tr>
+            <td><button onclick="appendToDisplay('7')">7</button></td>
+            <td><button onclick="appendToDisplay('8')">8</button></td>
+            <td><button onclick="appendToDisplay('9')">9</button></td>
+            <td><button onclick="appendToDisplay('*')">*</button></td>
+            <td><button onclick="appendToDisplay('**')">^</button></td>
+            <td><button onclick="appendToDisplay('cos(')">cos</button></td>
+          </tr>
+          <tr>
+            <td><button onclick="appendToDisplay('4')">4</button></td>
+            <td><button onclick="appendToDisplay('5')">5</button></td>
+            <td><button onclick="appendToDisplay('6')">6</button></td>
+            <td><button onclick="appendToDisplay('-')">-</button></td>
+            <td><button onclick="appendToDisplay('(')">(</button></td>
+            <td><button onclick="appendToDisplay('sin(')">sin</button></td>
+          </tr>
+          <tr>
+            <td><button onclick="appendToDisplay('1')">1</button></td>
+            <td><button onclick="appendToDisplay('2')">2</button></td>
+            <td><button onclick="appendToDisplay('3')">3</button></td>
+            <td><button onclick="appendToDisplay('+')">+</button></td>
+            <td><button onclick="appendToDisplay(')')">)</button></td>
+            <td><button onclick="appendToDisplay('ln(')">ln</button></td>
+          </tr>
+          <tr>
+            <td><button onclick="appendToDisplay('0')">0</button></td>
+            <td><button onclick="appendToDisplay('.')">.</button></td>
+            <td colspan="2"><button onclick="calculateResult()">=</button></td>
+            <td><button onclick="calculateSquareRoot()">√</button></td>
+            <td><button onclick="appendToDisplay('log(')">log</button></td>
+          </tr>
+        </table>
+      </div>
+    
+      <div id="age-calculator" style="display:none;">
+        <h3>Age Calculator</h3>
+        <label for="dob">Date of Birth:</label>
+        <input type="date" id="dob">
+        <label for="time">Time of Birth (24 hours format/Ignore):</label>
+        <input type="time" id="time" value="00:00">
+        <button onclick="calculateAge()">Calculate Age</button>
+        <div id="age-result"></div>
+      </div>
+    
+      <div id="interest-calculator" style="display:none;">
+        <h3>Interests Calculator</h3>
+        <label for="interest-type">Select Interest Type:</label>
+        <select id="interest-type">
+          <option value="Simple">Simple Interest</option>
+          <option value="Compound">Compound Interest</option>
+        </select>
+        <br><br>
+        <label for="numeral-system-interest" class="numeral-system-selector">Select Numeral System:</label>
+        <select id="numeral-system-interest" onchange="updateInterestResult()">
+          <option value="en" selected>English (1,000,000)</option>
+          <option value="en-IN">Indian (10,00,000)</option>
+        </select>
+        <br><br>
+        <label for="principal">Principal Amount:</label>
+        <input type="number" id="principal" placeholder="Enter principal amount">
+        <label for="rate">Interest Rate:</label>
+        <input type="number" id="rate" placeholder="Enter interest rate">
+        <label for="time-interest">Time (in years):</label>
+        <input type="number" id="time-interest" placeholder="Enter time in years">
+        <button onclick="calculateInterest()">Calculate Interest</button>
+        <div id="interest-result"></div>
+      </div>
+
+      <div id="sip-calculator" style="display:none;">
+        <h3> Systematic Investment Plan (SIP) Calculator</h3>
+        <label for="monthly-investment">Monthly Investment:</label>
+        <input type="number" id="monthly-investment" placeholder="Enter monthly investment amount">
+        <label for="annual-return">Expected Annual Return Rate:</label>
+        <input type="number" id="annual-return" placeholder="Enter expected annual return">
+        <label for="sip-period">Investment Period (in years):</label>
+        <input type="number" id="sip-period" placeholder="Enter investment period in years">
+        <label for="numeral-system-sip" class="numeral-system-selector">Select Numeral System:</label>
+          <select id="numeral-system-sip" onchange="updateSIPResult()">
+            <option value="en" selected>English (1,000,000)</option>
+            <option value="en-IN">Indian (10,00,000)</option>
+          </select>
+          <br><br>
+        <button onclick="calculateSIP()">Calculate SIP</button>
+        <div id="sip-result"></div>
+      </div>
+
+      <div id="date-difference-calculator" style="display:none;">
+        <h3>Date Difference Calculator</h3>
+        <label for="numeral-system-date-difference" class="numeral-system-selector">Select Numeral System:</label>
+        <select id="numeral-system-date-difference" onchange="updateDateDifferenceResult()">
+          <option value="en" selected>English (1,000,000)</option>
+          <option value="en-IN">Indian (10,00,000)</option>
+        </select>
+        <br><br>
+        <label for="start-date">Start Date:</label>
+        <input type="date" id="start-date">
+        <label for="end-date">End Date:</label>
+        <input type="date" id="end-date">
+        <button onclick="calculateDateDifference()">Calculate Difference</button>
+        <div id="date-difference-result"></div>
+      </div>
+    
+      <div id="base-calculator" style="display:none;">
+        <h3>Number Base Converter</h3>
+        <label for="number">Enter Number:</label>
+        <input type="text" id="number" placeholder="Enter a number">
+    
+        <label for="from-radix">From Radix:</label>
+        <select id="from-radix">
+          <option value="2">Binary</option>
+          <option value="8">Octal</option>
+          <option value="10" selected>Decimal</option>
+          <option value="16">Hexadecimal</option>
+        </select>
+    
+        <button onclick="convertNumber()">Convert</button>
+    
+        <div id="result"></div>
+      </div>
+
+      <div id="percentage-calculator" style="display:none;">
+        <h3>Percentage Calculator</h3>
+        <label for="original-value">Original Value:</label>
+        <input type="number" id="original-value" placeholder="Enter original value">
+        <label for="percentage">Percentage:</label>
+        <input type="number" id="percentage" placeholder="Enter percentage">
+        <button onclick="calculatePercentage()">Calculate Percentage</button>
+        <div id="percentage-result"></div>
+      </div>
+    
+      <div id="fuel-consumption-calculator" style="display:none;">
+        <h3>Fuel Consumption Calculator</h3>
+        <label for="distance">Distance Traveled (in km):</label>
+        <input type="number" id="distance" placeholder="Enter distance">
+        <label for="fuel">Fuel Consumed (in liters):</label>
+        <input type="number" id="fuel" placeholder="Enter fuel consumed">
+        <button onclick="calculateFuelConsumption()">Calculate Fuel Consumption</button>
+        <div id="fuel-consumption-result"></div>
+      </div>
+
+      <div id="units-calculator" style="display:none;">
+        <h3>Units Calculator</h3>
+        <label for="unit-category">Select Unit Category:</label>
+        <select id="unit-category" onchange="changeUnitCategory()">
+          <option value="choose">Choose an option</option>
+          <option value="distance">Distance</option>
+          <option value="time">Time</option>
+          <option value="speed">Speed</option>
+          <option value="power">Power</option>
+          <option value="length">Length</option>
+          <option value="weight">Weight</option>
+        </select>
+        <br><br>
+    
+        <label for="unit">Select Unit:</label>
+        <select id="unit"></select>
+    
+        <br><br>
+    
+        <label for="unit-value">Enter Value:</label><br>
+        <input type="text" id="unit-value" placeholder="Enter value">
+    
+        <button onclick="convertUnits()">Convert</button>
+        <div id="unit-converter-result"></div>
+    </div>
+    
+    <div id="mortgage-calculator" style="display:none;">
+      <h3>Mortgage Calculator</h3>
+      <label for="loan-amount">Loan Amount (Any currency):</label>
+      <input type="text" id="loan-amount" placeholder="Enter loan amount">
+      <label for="interest-rate">Interest Rate (%):</label>
+      <input type="text" id="interest-rate" placeholder="Enter interest rate">
+      <label for="loan-term">Loan Term (years):</label>
+      <input type="text" id="loan-term" placeholder="Enter loan term">
+      <label for="numeral-system">Numeral System:</label>
+      <select id="numeral-system">
+        <option value="english">English (Millions)</option>
+        <option value="indian">Indian (Lakhs)</option>
+      </select>
+      <button onclick="calculateMortgage()">Calculate</button>
+      <div id="mortgage-result"></div>
+    </div>
+
+    <div id="geometry-calculator" style="display:none;">
+      <h3>Geometry Calculator</h3>
+      <label for="shape-type">Select Shape Type:</label>
+      <select id="shape-type" onchange="changeShapeType()">
+        <option value="choose">Choose an option</option>
+        <option value="square">Square</option>
+        <option value="rectangle">Rectangle</option>
+        <option value="triangle">Triangle</option>
+        <option value="circle">Circle</option>
+        <option value="cube">Cube</option>
+        <option value="cuboid">Cuboid</option>
+        <option value="sphere">Sphere</option>
+        <option value="cone">Cone</option>
+        <option value="cylinder">Cylinder</option>
+      </select>
+      <br><br>
+      <div id="geometry-inputs"></div>
+      <button onclick="calculateGeometry()">Calculate</button>
+      <div id="geometry-result"></div>
+    </div>
+
+    <div id="bmi-calculator" style="display:none;">
+      <h2>BMI Calculator</h2>
+      <p>BMI Categories: <br>
+        Underweight = less than 18.5 <br>
+        Normal weight = 18.5 to 24.9<br>
+        Overweight = 25 to 29.9<br>
+        Obesity = 30 or greater</p><br>
+      <label for="weight">Weight (kg):</label>
+      <input type="text" id="weight">
+  
+      <label for="height">Height (in):</label>
+      <input type="text" id="height">
+  
+      <button onclick="calculateBMI()">Calculate</button>
+      <div id="bmi-result"></div>
+    </div>
+
+
+
+
+    
+    </div>
+  <a href="https://linktr.ee/kjpvaibhav"><img src="linktreeQR_200x200.png" alt="About Me QR" style="width:50px;height:50px;" class="img-center"></a>
+  <a href="https://upload.wikimedia.org/wikipedia/en/thumb/4/41/Flag_of_India.svg/1200px-Flag_of_India.svg.png?20230723002237"><h3>👉Made in 🇮🇳👈</h3></a>
+  </body>
+</html>
